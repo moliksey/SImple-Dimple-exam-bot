@@ -24,8 +24,8 @@ public class Bot extends TelegramLongPollingBot {
     Map<String,Command> commands= new HashMap<>() {
         {
             put("/start", new StartCommand());
-            put("examversion", new TakeExamVersionCommand());
-            put("", new TakeTaskCommand());
+            put("/examversion", new TakeExamVersionCommand());
+            put("/taskversion", new TakeTaskCommand());
             put("/subject", new GetSubjectCommand());
             put("/commands", new Commands());
         }
