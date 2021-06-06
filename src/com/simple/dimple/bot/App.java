@@ -8,9 +8,9 @@ import java.util.Properties;
 public class App {
 
     public static void main(String[] args) throws IOException, TelegramApiException{
-        Properties tgProps= new Properties;
+        Properties tgProps= new Properties();
         tgProps.load(App.class.getClassLoader().getResourceAsStream("tg.properties"));
-        final Bot bot = new Bot(tgProps.getProperty("name"),tgProps.getProperty("token"));
+        final Bot bot = new Bot("@simple_dimple_exam_bot","1814922061:AAG50huLS-2SZ7jtj6vqfo620Gr8hMj8aKk");
         TelegramBotsApi botsApi=new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(bot);
     }

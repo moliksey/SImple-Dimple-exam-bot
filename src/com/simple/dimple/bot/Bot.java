@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -22,19 +23,21 @@ public class Bot extends TelegramLongPollingBot {
     }
     Map<String,Command> commands= new HashMap<>() {
         {
-            put("start", new StartCommand());
+            put("/start", new StartCommand());
             put("examversion", new TakeExamVersionCommand());
-            put("", new TakeVersionCommand());
+            put("", new TakeTaskCommand());
+            put("/subject", new GetSubjectCommand());
+            put("/commands", new Commands());
         }
     };
     @Override
     public String getBotUsername() {
-        return name;
+        return this.name;
     }
 
     @Override
     public String getBotToken() {
-        return token;
+        return this.token;
     }
 
 
@@ -44,15 +47,21 @@ public class Bot extends TelegramLongPollingBot {
         final Message message=update.getMessage();
         final long chatId=message.getChatId();
         final Dialog dialog=dialogs.computeIfAbsent(chatId, id -> new Dialog());
-        commands.getOrDefault(message.getText(),d->{}).execute(dialog);
-        SendMessage answer= new SendMessage();
-        answer.setText("");
-        answer.setChatId(String.valueOf(chatId));
+        dialog.setLastmessege(message);
+        String[] words=message.getText().split(" ");
+        if(dialog.isNeedToCheck()){
+            new CheckAnswerCommand().execute(dialog);
+        }
+        else{
+        commands.getOrDefault(words[0],d->{}).execute(dialog);
+        }
+        dialog.setId(chatId);
         try{
-            this.execute(answer);
+            this.execute(dialog.getNextMessege());
         }catch (TelegramApiException e){
             e.printStackTrace();
         }
+
     }
 }
 
