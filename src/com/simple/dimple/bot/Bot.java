@@ -1,14 +1,12 @@
 package com.simple.dimple.bot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -57,7 +55,14 @@ public class Bot extends TelegramLongPollingBot {
         }
         dialog.setId(chatId);
         try{
-            this.execute(dialog.getNextMessege());
+            if(!(words[0].equals("/examversion")||words[0].equals("/taskversion")))
+                this.execute(dialog.getNextMessage());
+            else{
+                if(words[0].equals("/examversion")){
+                    this.execute(dialog.getDocMessage());
+                }
+                else{
+                this.execute(dialog.getPhMessage());}}
         }catch (TelegramApiException e){
             e.printStackTrace();
         }
