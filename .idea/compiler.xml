@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SImple-Dimple-exam-bot" target="11" />
+      <module name="SImple-Dimple-exam-bot" target="${java.version}" />
     </bytecodeTargetLevel>
   </component>
 </project>
