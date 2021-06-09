@@ -1,1 +1,1 @@
-# SImple-Dimple-exam-bot
+# Simple-Dimple-exam-bot
