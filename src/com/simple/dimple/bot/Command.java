@@ -2,7 +2,9 @@ package com.simple.dimple.bot;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public interface Command {
@@ -21,8 +23,27 @@ class CheckAnswerCommand implements Command{
 
     @Override
     public void execute(Dialog dialog) {
+        String[] answers=dialog.getLastmessege().split(" ");
+        String[] rightAnswers=dialog.getAns().split(" ");
+        Set<String> mistakes=new HashSet<>();
         SendMessage message=new SendMessage();
-        message.setText("Checked");
+        if(answers.length>1){
+        for(int i=0;i<answers.length;i++)
+        {
+            if(!answers[i].split(".")[1].equals(rightAnswers[i].split(".")[1]))
+            {
+                mistakes.add(answers[i].split(".")[0]);
+            }
+        }
+
+        }
+        else{
+            if(!answers[0].equals(rightAnswers[0]))
+            {
+                mistakes.add(answers[0]);
+                message.setText("wrong");
+            }
+        }
         dialog.setText(message);
     }
 }
@@ -30,6 +51,7 @@ class TakeExamVersionCommand implements Command{
 
     @Override
     public void execute(Dialog dialog) {
+        dialog.setNeedToCheck(true);
     //Generate and return exam version, you may add method in dialog class
     }
 }
@@ -37,6 +59,7 @@ class TakeTaskCommand implements Command{
     @Override
     public void execute(Dialog dialog) {
         String[] words=dialog.getLastmessege().split(" ");
+        dialog.setNeedToCheck(true);
         //Generate and return exam task, you may add method in dialog class, number of task in words[1]
     }
 }
