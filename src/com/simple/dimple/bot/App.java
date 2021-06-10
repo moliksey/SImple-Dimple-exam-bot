@@ -30,8 +30,8 @@ public class App {
         } finally {
             //close connection ,stmt and resultset here
             try { con.close(); } catch(SQLException se) { /*can't do anything */ }
-            try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
-            try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
+          //  try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
+            //try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
         }
 
         Properties tgProps= new Properties();
