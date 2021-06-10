@@ -13,26 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class App {
-    private static final String url = "jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11417745";
-    private static final String user = "sql11417745";
-    private static final String password = "eIMih4pNNj";
-
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
 
     public static void main(String[] args) throws IOException, TelegramApiException{
-        try {
-            // opening database connection to MySQL server
-            con = DriverManager.getConnection(url, user, password);
-        } catch (SQLException sqlEx) {
-            sqlEx.printStackTrace();
-        } finally {
-            //close connection ,stmt and resultset here
-            try { con.close(); } catch(SQLException se) { /*can't do anything */ }
-          //  try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
-            //try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
-        }
 
         Properties tgProps= new Properties();
         tgProps.load(App.class.getClassLoader().getResourceAsStream("tg.properties"));
