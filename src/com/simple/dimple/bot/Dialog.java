@@ -3,17 +3,20 @@ package com.simple.dimple.bot;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 public class Dialog {
     private boolean needToCheck=false;
     private long versionId;
-    private String lastmessege;
+    private String lastmessege=new String();
+    private String currentmessege;
     private SendMessage nextMessage;
     private SendPhoto phMessage=new SendPhoto();
     private SendDocument docMessage=new SendDocument();
     private String subject;
     private String ans;
+    private boolean wasWrong=false;
     public void setText(SendMessage message)
     {
         nextMessage =message;
@@ -27,8 +30,9 @@ public class Dialog {
     {
         return nextMessage;
     }
-    public void setLastmessege(Message message){
-        lastmessege=message.getText();
+    public void setCurrentmessege(Message message){
+        lastmessege=currentmessege;
+        currentmessege =message.getText();
 
     }
     public void setSubject(String subject){
@@ -40,11 +44,11 @@ public class Dialog {
     }
 
 
-    public String getLastmessege() {
-        if(lastmessege.isEmpty())
+    public String getCurrentmessege() {
+        if(currentmessege.isEmpty())
             return null;
         else
-            return lastmessege;
+            return currentmessege;
     }
 
     public boolean isNeedToCheck() {
@@ -59,16 +63,16 @@ public class Dialog {
         return phMessage;
     }
 
-    public void setPhMessage(SendPhoto phMessage) {
-        this.phMessage = phMessage;
+    public void setPhMessage(InputFile ph) {
+        this.phMessage.setPhoto(ph);
     }
 
     public SendDocument getDocMessage() {
         return docMessage;
     }
 
-    public void setDocMessage(SendDocument docMessage) {
-        this.docMessage = docMessage;
+    public void setDocMessage(InputFile document) {
+        this.docMessage.setDocument(document);
     }
 
     public String getAns() {
@@ -77,5 +81,25 @@ public class Dialog {
 
     public void setAns(String ans) {
         this.ans = ans;
+    }
+
+    public long getVersionId() {
+        return versionId;
+    }
+
+    public void setVersionId(long versionId) {
+        this.versionId = versionId;
+    }
+
+    public String getLastmessege() {
+        return lastmessege;
+    }
+
+    public boolean isItWasWrong() {
+        return wasWrong;
+    }
+
+    public void setWasWrong(boolean wasWrong) {
+        this.wasWrong = wasWrong;
     }
 }

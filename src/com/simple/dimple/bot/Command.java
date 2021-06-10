@@ -1,7 +1,10 @@
 package com.simple.dimple.bot;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,11 +24,11 @@ class CheckAnswerCommand implements Command{
 
     @Override
     public void execute(Dialog dialog) {
-        String[] answers=dialog.getLastmessege().split(" ");
+        String[] answers=dialog.getCurrentmessege().split(" ");
         String[] rightAnswers=dialog.getAns().split(" ");
         Set<String> mistakes=new HashSet<>();
         SendMessage message=new SendMessage();
-        message.setText("Checked");
+
         if(answers.length>1){
             for(int i=0;i<answers.length;i++)
             {
@@ -40,9 +43,29 @@ class CheckAnswerCommand implements Command{
             if(!answers[0].equals(rightAnswers[0]))
             {
                 mistakes.add(answers[0]);
-                message.setText("wrong");
+
             }
         }
+        if (mistakes.size()==0){
+            message.setText("You haven't made a single mistake");
+            dialog.setText(message);
+        }else{
+            dialog.setWasWrong(true);
+            if(answers.length==1){
+                //sending right answer for this question
+                message.setText("You wrong!");
+                InputFile document= new InputFile(new File(""),String.valueOf(dialog.getVersionId()));
+                dialog.setDocMessage(document);
+                dialog.setText(message);
+            }else{
+                //sending right answer for all this questions
+                message.setText("You wrong in "+String.valueOf(mistakes.size())+" tasks. Numbers of tasks you failed: "+mistakes.toString());
+                InputFile document= new InputFile(new File(""),String.valueOf(dialog.getVersionId()));
+                dialog.setDocMessage(document);
+                dialog.setText(message);
+            }
+        }
+        dialog.setNeedToCheck(false);
     }
 }
 class TakeExamVersionCommand implements Command{
@@ -50,13 +73,24 @@ class TakeExamVersionCommand implements Command{
     @Override
     public void execute(Dialog dialog) {
     //Generate and return exam version, you may add method in dialog class
+        dialog.setVersionId(1l);//set here version id
+        dialog.setAns(" ");//set answer here
+        InputFile document= new InputFile(new File(""),String.valueOf(dialog.getVersionId()));
+        dialog.setDocMessage(document);
+        dialog.setNeedToCheck(true);
+
     }
 }
 class TakeTaskCommand implements Command{
     @Override
     public void execute(Dialog dialog) {
-        String[] words=dialog.getLastmessege().split(" ");
+        String[] words=dialog.getCurrentmessege().split(" ");
         //Generate and return exam task, you may add method in dialog class, number of task in words[1]
+        dialog.setVersionId(1l);//set here version id
+        dialog.setAns(" ");//set answer here
+        InputFile document= new InputFile(new File(""),String.valueOf(dialog.getVersionId()));
+        dialog.setDocMessage(document);
+        dialog.setNeedToCheck(true);
     }
 }
 class Commands implements Command{
@@ -69,8 +103,9 @@ class Commands implements Command{
                 "\"[number of task].[answer in lower case, in one word]\".\n"+
         "\"/taskversion [Task number]\" - takes one of our exam tasks and sends it to you.\n"+
         "\"/subject [Subject name]\" - there you can choose subject you want to studiing.\n" +
-                "Now our bot can help with: Math, RussianLanguage, Physics, InformationTechnologies\n"+
-        "\"/commands\" - the command you called, it shows the other commands");
+                "Now our bot can help with:"/* Math, RussianLanguage, Physics, */+" InformationTechnologies\n"+
+        "\"/new\" - take you another task\n"+
+                "\"/commands\" - the command you called, it shows the other commands");
         dialog.setText(message);
     }
 }
@@ -79,7 +114,7 @@ class GetSubjectCommand implements Command{
     @Override
     public void execute(Dialog dialog) {
         Set<String> subjects=Set.of("RussianLanguage","Math","Physics","InformationTechnologies");
-    String[] words=dialog.getLastmessege().split(" ");
+    String[] words=dialog.getCurrentmessege().split(" ");
         SendMessage message=new SendMessage();
     if(subjects.contains(words[1]))
     {
