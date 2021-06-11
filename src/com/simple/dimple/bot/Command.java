@@ -36,11 +36,24 @@ class CheckAnswerCommand implements Command{
         SendMessage message=new SendMessage();
         DatabaseHandler handler=new DatabaseHandler();
         if(answers.length>1){
+            for(int i=0;i<rightAnswers.length;i++)
+            {
+                mistakes.add(String.valueOf(i+1));
+            }
+            int t=0;
             for(int i=0;i<answers.length;i++)
             {
-                if(!answers[i].split("\\.")[1].equals(rightAnswers[i].split("\\.")[1]))
+                if(!answers[i].contains("\\."))
                 {
-                    mistakes.add(answers[i].split("\\.")[0]);
+                    while(!answers[i].split("\\.")[0].equals(rightAnswers[i+t].split("\\.")[0]))
+                        t++;
+                    if(i+t>=rightAnswers.length)
+                        break;
+                    if(answers[i].split("\\.")[1].equals(rightAnswers[i+t].split("\\.")[1]))
+                    {
+                        mistakes.remove(answers[i].split("\\.")[0]);
+
+                    }
                 }
             }
 
