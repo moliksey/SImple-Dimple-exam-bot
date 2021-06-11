@@ -74,6 +74,9 @@ public class DatabaseHandler extends Configs{
 
     public String getResult(int Primary_Score) {
         ResultSet resSet = null;
+        if(Primary_Score==0)
+            return "0";
+        Primary_Score+=5;
         String select = "SELECT *" + " FROM " + Const.TABLE_EVALUATION_CRITERIA_IT + " WHERE " +
                 Const.EVALUATION_CRITERIA_IT_PRIMARY_SCORE + "=" + String.valueOf(Primary_Score);
         String Result = null;

@@ -35,7 +35,7 @@ class CheckAnswerCommand implements Command{
         Set<String> mistakes=new HashSet<>();
         SendMessage message=new SendMessage();
         DatabaseHandler handler=new DatabaseHandler();
-        if(answers.length>1){
+
             for(int i=0;i<rightAnswers.length;i++)
             {
                 mistakes.add(String.valueOf(i+1));
@@ -57,20 +57,14 @@ class CheckAnswerCommand implements Command{
                 }
             }
 
-        }
-        else{
-            if(!answers[0].equals(rightAnswers[0]))
-            {
-                mistakes.add(answers[0]);
 
-            }
-        }
+
         if (mistakes.size()==0){
             message.setText("You haven't made a single mistake");
             dialog.setText(message);
         }else{
             dialog.setWasWrong(true);
-            if(answers.length==1){
+            if(rightAnswers.length==1){
                 //sending right answer for this question
                 message.setText("You wrong!");
                 InputFile document= null;
@@ -84,7 +78,13 @@ class CheckAnswerCommand implements Command{
                 dialog.setDocMessage(document);
                 dialog.setText(message);
             }else{
-                message.setText("You wrong in "+String.valueOf(mistakes.size())+" tasks. Numbers of tasks you failed: "+mistakes.toString());
+                int score=30;
+                score=score-mistakes.size();
+                for(int i=25; i<=27; i++)
+                {  if(mistakes.contains(String.valueOf(i)));
+                score--;}
+                message.setText("You wrong in "+String.valueOf(mistakes.size())+" tasks. Numbers of tasks you failed: "+mistakes.toString()+
+                        ". Your score:" +handler.getResult(score));
                 File doc=new File("/src/resources"+String.valueOf(dialog.getVersionId()));
                 try {
                     InputStream is=new URL(handler.getSolutions(String.valueOf(dialog.getVersionId()))).openStream();
