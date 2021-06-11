@@ -71,7 +71,8 @@ class CheckAnswerCommand implements Command{
                 dialog.setDocMessage(document);
                 dialog.setText(message);
             }else{
-                message.setText("You wrong in "+String.valueOf(mistakes.size())+" tasks. Numbers of tasks you failed: "+mistakes.toString());
+                message.setText("You wrong in "+String.valueOf(mistakes.size())+" tasks. Numbers of tasks you failed: "
+                        + mistakes.toString() + ". You scored: " + handler.getResult(rightAnswers.length-mistakes.size()));
                 File doc=new File("/src/resources"+String.valueOf(dialog.getVersionId()));
                 try {
                     InputStream is=new URL(handler.getSolutions(String.valueOf(dialog.getVersionId()))).openStream();
@@ -182,3 +183,4 @@ class GetSubjectCommand implements Command{
         dialog.setText(message);
     }
 }
+

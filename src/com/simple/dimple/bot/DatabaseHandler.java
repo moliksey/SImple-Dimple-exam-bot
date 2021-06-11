@@ -71,16 +71,16 @@ public class DatabaseHandler extends Configs{
         return Solutions;
     }
 
-    public int getResult(int Primary_Score) {
+    public String getResult(int Primary_Score) {
         ResultSet resSet = null;
         String select = "SELECT *" + " FROM " + Const.TABLE_EVALUATION_CRITERIA_IT + " WHERE " +
                 Const.EVALUATION_CRITERIA_IT_PRIMARY_SCORE + "=" + String.valueOf(Primary_Score);
-        int Result = 0;
+        String Result = null;
         try {
             Statement statement = getDbConnection().createStatement();
             resSet = statement.executeQuery(select);
             while (resSet.next()) {
-                Result = resSet.getInt(Const.EVALUATION_CRITERIA_IT_SECONDARY_SCORE);
+                Result = String.valueOf(resSet.getInt(Const.EVALUATION_CRITERIA_IT_SECONDARY_SCORE));
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
