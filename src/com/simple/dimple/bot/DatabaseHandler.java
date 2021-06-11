@@ -87,5 +87,19 @@ public class DatabaseHandler extends Configs{
         }
         return Result;
     }
+    public void Input_Variant(String Answers, String Task, String Solutions) throws SQLException, ClassNotFoundException {
+        String insert = "INSERT INTO " + Const.TABLE_TASKS + "(" + Const.TASKS_ANSWERS + "," + Const.TASKS_TASK +
+                "," + Const.TASKS_SOLUTIONS + ") " + "VALUES(?,?,?)";
+        PreparedStatement PrSt = getDbConnection().prepareStatement(insert);
+        PrSt.setString(2, Const.TASKS_ANSWERS);
+        PrSt.setString(3, Const.TASKS_TASK);
+        PrSt.setString(4, Const.TASKS_SOLUTIONS);
+        try {
+            PrSt.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
 }
