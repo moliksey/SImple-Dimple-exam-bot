@@ -61,9 +61,9 @@ TakeExamVersionCommand | Отправляет  вариант КИМа
     Класс осуществляющий соединение с базой данных.
 Имя | Функция | Тип
 ------------ | ------------- | -------------
-getTask() || String(String Variant)
-getAnswers() || String(String)
-getSolutions() || String(String)
-getResult() || String(int)
-Input_Variant() || int(String Answers, String Task, String Solutions)
+getTask() | Возвращает значение типа String (ссылку на PDF документ с заданиями) из MySQL таблицы | String(String Variant) 
+getAnswers() | Возвращает значение типа String (строку с правильными ответами) из MySQL таблицы | String(String) 
+getSolutions() | Возвращает значение типа String (ссылку на PDF документ с подробным решением заданий) из MySQL таблицы | String(String)
+getResult() | Возвращает значение типа String (Перевод балла из первичного во вторичный) из MySQL таблицы | String(int)
+Input_Variant() | Позволяет ввести новый вариант в БД MySQL | int(String Answers, String Task, String Solutions)
 
