@@ -28,6 +28,7 @@ public class Bot extends TelegramLongPollingBot {
             put("/taskversion", new TakeTaskCommand());
             put("/subject", new GetSubjectCommand());
             put("/commands", new Commands());
+            put("/addversion", new InputVariantCommand());
         }
     };
     @Override
