@@ -45,9 +45,9 @@ class CheckAnswerCommand implements Command{
             {
                 if(!answers[i].contains("\\."))
                 {
-                    while(!answers[i].split("\\.")[0].equals(rightAnswers[i+t].split("\\.")[0]))
-                        t++;
-                    if(i+t>=rightAnswers.length)
+                    while(!answers[i].split("\\.")[0].equals(rightAnswers[i+t].split("\\.")[0])&&(i+t+1<rightAnswers.length))
+                    {   t++;}
+                    if(i+t+1>=rightAnswers.length)
                         break;
                     if(answers[i].split("\\.")[1].equals(rightAnswers[i+t].split("\\.")[1]))
                     {
