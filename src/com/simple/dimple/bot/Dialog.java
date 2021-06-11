@@ -11,7 +11,7 @@ public class Dialog {
     private long versionId;
     private String lastmessege=new String();
     private String currentmessege;
-    private SendMessage nextMessage;
+    private SendMessage nextMessage=new SendMessage();
     private SendPhoto phMessage=new SendPhoto();
     private SendDocument docMessage=new SendDocument();
     private String subject;

@@ -1,11 +1,17 @@
 package com.simple.dimple.bot;
 
+import org.apache.commons.io.FileUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public interface Command {
@@ -28,7 +34,7 @@ class CheckAnswerCommand implements Command{
         String[] rightAnswers=dialog.getAns().split(" ");
         Set<String> mistakes=new HashSet<>();
         SendMessage message=new SendMessage();
-
+        DatabaseHandler handler=new DatabaseHandler();
         if(answers.length>1){
             for(int i=0;i<answers.length;i++)
             {
@@ -54,13 +60,34 @@ class CheckAnswerCommand implements Command{
             if(answers.length==1){
                 //sending right answer for this question
                 message.setText("You wrong!");
-                InputFile document= new InputFile(new File(""),String.valueOf(dialog.getVersionId()));
+                InputFile document= null;
+                try {
+                    document = new InputFile(new File(handler.getTask(String.valueOf(dialog.getVersionId()))),String.valueOf(dialog.getVersionId()));
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 dialog.setDocMessage(document);
                 dialog.setText(message);
             }else{
-                //sending right answer for all this questions
                 message.setText("You wrong in "+String.valueOf(mistakes.size())+" tasks. Numbers of tasks you failed: "+mistakes.toString());
-                InputFile document= new InputFile(new File(""),String.valueOf(dialog.getVersionId()));
+                File doc=new File("/src/resources"+String.valueOf(dialog.getVersionId()));
+                try {
+                    InputStream is=new URL(handler.getSolutions(String.valueOf(dialog.getVersionId()))).openStream();
+                    FileUtils.copyInputStreamToFile(is, doc);
+                    is.close();
+
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+                InputFile document= new InputFile(doc, doc.getName());
                 dialog.setDocMessage(document);
                 dialog.setText(message);
             }
@@ -72,10 +99,33 @@ class TakeExamVersionCommand implements Command{
 
     @Override
     public void execute(Dialog dialog) {
-    //Generate and return exam version, you may add method in dialog class
-        dialog.setVersionId(1l);//set here version id
-        dialog.setAns(" ");//set answer here
-        InputFile document= new InputFile(new File(""),String.valueOf(dialog.getVersionId()));
+        DatabaseHandler handler=new DatabaseHandler();
+        Random r = new Random();
+        int x = r.nextInt(Const.ROWS_NUMBER) + 1;
+        dialog.setVersionId(x);
+        try {
+            dialog.setAns(handler.getAnswers(String.valueOf(x)));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        File doc=new File("/src/resources"+String.valueOf(dialog.getVersionId()));
+        try {
+            InputStream is=new URL(handler.getTask(String.valueOf(x))).openStream();
+            FileUtils.copyInputStreamToFile(is, doc);
+            is.close();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }catch (MalformedURLException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        InputFile document= new InputFile(doc, doc.getName());
         dialog.setDocMessage(document);
         dialog.setNeedToCheck(true);
 
@@ -85,6 +135,10 @@ class TakeTaskCommand implements Command{
     @Override
     public void execute(Dialog dialog) {
         String[] words=dialog.getCurrentmessege().split(" ");
+        DatabaseHandler handler=new DatabaseHandler();
+        Random r = new Random();
+        int x = r.nextInt(1) + 1;
+        dialog.setVersionId(x);
         //Generate and return exam task, you may add method in dialog class, number of task in words[1]
         dialog.setVersionId(1l);//set here version id
         dialog.setAns(" ");//set answer here
