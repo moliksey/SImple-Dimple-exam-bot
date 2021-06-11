@@ -64,16 +64,17 @@ public class Bot extends TelegramLongPollingBot {
         final Dialog dialog=dialogs.computeIfAbsent(chatId, id -> new Dialog());
         dialog.setCurrentmessege(message);
         String[] words;
+
         if(message.getText().equals("/new")) {
             words=dialog.getLastmessege().split(" ");
             commands.getOrDefault(words[0], d -> {
             }).execute(dialog);
         }else{
-            words=message.getText().split(" ");
-            commands.getOrDefault(words[0],d->{}).execute(dialog);
             if(dialog.isNeedToCheck()){
                 new CheckAnswerCommand().execute(dialog);
             }
+            words=message.getText().split(" ");
+            commands.getOrDefault(words[0],d->{}).execute(dialog);
         }
         dialog.setId(chatId);
         try{
@@ -87,7 +88,9 @@ public class Bot extends TelegramLongPollingBot {
                 }
             }
             else{
+
                     this.execute(dialog.getDocMessage());
+
             }
         }catch (TelegramApiException e){
             e.printStackTrace();
