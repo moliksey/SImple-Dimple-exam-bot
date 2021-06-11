@@ -114,7 +114,7 @@ class TakeExamVersionCommand implements Command{
     public void execute(Dialog dialog) {
         DatabaseHandler handler=new DatabaseHandler();
         Random r = new Random();
-        int x = r.nextInt(Const.ROWS_NUMBER) + 1;
+        int x = r.nextInt(2) + 1;
         dialog.setVersionId(x);
         try {
             dialog.setAns(handler.getAnswers(String.valueOf(x)));
@@ -150,7 +150,7 @@ class TakeTaskCommand implements Command{
         String[] words=dialog.getCurrentmessege().split(" ");
         DatabaseHandler handler=new DatabaseHandler();
         Random r = new Random();
-        int x = r.nextInt(1) + 1;
+        int x = r.nextInt(2) + 1;
         dialog.setVersionId(x);
         //Generate and return exam task, you may add method in dialog class, number of task in words[1]
         dialog.setVersionId(1l);//set here version id

@@ -71,10 +71,11 @@ public class Bot extends TelegramLongPollingBot {
             commands.getOrDefault(words[0], d -> {
             }).execute(dialog);
         }else{
-            if(dialog.isNeedToCheck()){
+            words=message.getText().split(" ");
+            if(dialog.isNeedToCheck()&&!(words[0].equals("/examversion")||words[0].equals("/taskversion"))){
                 new CheckAnswerCommand().execute(dialog);
             }
-            words=message.getText().split(" ");
+
             commands.getOrDefault(words[0],d->{}).execute(dialog);
         }
         dialog.setId(chatId);

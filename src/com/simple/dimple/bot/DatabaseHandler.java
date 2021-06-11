@@ -27,10 +27,10 @@ public class DatabaseHandler extends Configs{
             while(resSet.next()) {
                 Task = resSet.getString(Const.TASKS_TASK);
             }
+            dbConnection.close();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         return Task;
     }
 
@@ -45,6 +45,7 @@ public class DatabaseHandler extends Configs{
             while (resSet.next()) {
                 Answers = resSet.getString(Const.TASKS_ANSWERS);
             }
+            dbConnection.close();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -63,7 +64,7 @@ public class DatabaseHandler extends Configs{
             while (resSet.next()) {
                 Solutions = resSet.getString(Const.TASKS_SOLUTIONS);
             }
-
+            dbConnection.close();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -81,10 +82,12 @@ public class DatabaseHandler extends Configs{
             resSet = statement.executeQuery(select);
             while (resSet.next()) {
                 Result = String.valueOf(resSet.getInt(Const.EVALUATION_CRITERIA_IT_SECONDARY_SCORE));
+                dbConnection.close();
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return Result;
     }
     public void Input_Variant(String Answers, String Task, String Solutions) throws SQLException, ClassNotFoundException {
