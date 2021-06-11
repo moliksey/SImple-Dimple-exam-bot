@@ -7,7 +7,6 @@ public class DatabaseHandler extends Configs{
 
     public Connection getDbConnection()
             throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
         dbConnection = DriverManager.getConnection(url, user, password);
 
         return dbConnection;
@@ -20,12 +19,14 @@ public class DatabaseHandler extends Configs{
     public String getTask(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
         String select = "SELECT *" + " FROM " + Const.TABLE_NAME + " WHERE " + Const.TASKS_VARIANT +
-                " =" + Variant;
+                "=" + Variant;
         String Task = null;
         try {
             Statement statement = getDbConnection().createStatement();
             resSet = statement.executeQuery(select);
-            Task = resSet.getString(Const.TASKS_TASK);
+            while(resSet.next()) {
+                Task = resSet.getString(3);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -37,31 +38,36 @@ public class DatabaseHandler extends Configs{
         ResultSet resSet = null;
         String select = " SELECT *" + " FROM " + Const.TABLE_NAME + " WHERE " + Const.TASKS_VARIANT +
                 " =" + Variant;
+        String Answers = null;
         try {
-            PreparedStatement prSt = getDbConnection().prepareStatement(select);
-
-            resSet = prSt.executeQuery();
+            Statement statement = getDbConnection().createStatement();
+            resSet = statement.executeQuery(select);
+            while (resSet.next()) {
+                Answers = resSet.getString(Const.TASKS_ANSWERS);
+            }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        String Answers = resSet.getString(Const.TASKS_ANSWERS);
         return Answers;
     }
 
     public String getSolutions(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
-        String select = " SELECT *" + " FROM " + Const.TABLE_NAME + " WHERE " + Const.TASKS_VARIANT +
+        String select = "SELECT *" + " FROM " + Const.TABLE_NAME + " WHERE " + Const.TASKS_VARIANT +
                 "=" + Variant;
+        String Solutions = null;
         try {
-            PreparedStatement prSt = getDbConnection().prepareStatement(select);
+            Statement statement = getDbConnection().createStatement();
+            resSet = statement.executeQuery(select);
+            while (resSet.next()) {
+                Solutions = resSet.getString(Const.TASKS_SOLUTIONS);
+            }
 
-            resSet = prSt.executeQuery();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        String Solutions = resSet.getString(Const.TASKS_SOLUTIONS);
         return Solutions;
     }
 
