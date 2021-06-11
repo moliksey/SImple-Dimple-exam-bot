@@ -17,7 +17,7 @@ public class DatabaseHandler extends Configs{
 
     }
 
-    public ResultSet getTask(String Variant) throws SQLException, ClassNotFoundException {
+    public String getTask(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
         String select = "SELECT" + Const.TASKS_TASK + "FROM" + Const.TABLE_NAME + "WHERE" + Const.TASKS_VARIANT +
                 "=" + Variant;
@@ -29,10 +29,11 @@ public class DatabaseHandler extends Configs{
             e.printStackTrace();
         }
 
-        return resSet;
+        String Task = resSet.getString(Const.TASKS_TASK);
+        return Task;
     }
 
-    public ResultSet getAnswers(String Variant) throws SQLException, ClassNotFoundException {
+    public String getAnswers(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
         String select = "SELECT" + Const.TASKS_ANSWERS + "FROM" + Const.TABLE_NAME + "WHERE" + Const.TASKS_VARIANT +
                 "=" + Variant;
@@ -44,10 +45,11 @@ public class DatabaseHandler extends Configs{
             e.printStackTrace();
         }
 
-        return resSet;
+        String Answers = resSet.getString(Const.TASKS_ANSWERS);
+        return Answers;
     }
 
-    public ResultSet getSolutions(String Variant) throws SQLException, ClassNotFoundException {
+    public String getSolutions(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
         String select = "SELECT" + Const.TASKS_SOLUTIONS + "FROM" + Const.TABLE_NAME + "WHERE" + Const.TASKS_VARIANT +
                 "=" + Variant;
@@ -59,7 +61,8 @@ public class DatabaseHandler extends Configs{
             e.printStackTrace();
         }
 
-        return resSet;
+        String Solutions = resSet.getString(Const.TASKS_SOLUTIONS);
+        return Solutions;
     }
 
 }
