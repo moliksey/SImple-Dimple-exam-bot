@@ -9,27 +9,30 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class Dialog {
     private boolean needToCheck=false;
     private long versionId;
-    private String lastmessege;
-    private SendMessage nextMessage;
-    private SendPhoto phMessage;
-    private SendDocument docMessage;
+    private String lastmessege=new String();
+    private String currentmessege;
+    private SendMessage nextMessage=new SendMessage();
+    private SendPhoto phMessage=new SendPhoto();
+    private SendDocument docMessage=new SendDocument();
     private String subject;
     private String ans;
+    private boolean wasWrong=false;
     public void setText(SendMessage message)
     {
         nextMessage =message;
     }
     public void setId(long id){
-        phMessage.setChatId(String.valueOf(id));
         nextMessage.setChatId(String.valueOf(id));
+        phMessage.setChatId(String.valueOf(id));
         docMessage.setChatId(String.valueOf(id));
     }
     public SendMessage getNextMessage()
     {
         return nextMessage;
     }
-    public void setLastmessege(Message message){
-        lastmessege=message.getText();
+    public void setCurrentmessege(Message message){
+        lastmessege=currentmessege;
+        currentmessege =message.getText();
 
     }
     public void setSubject(String subject){
@@ -41,11 +44,11 @@ public class Dialog {
     }
 
 
-    public String getLastmessege() {
-        if(lastmessege.isEmpty())
+    public String getCurrentmessege() {
+        if(currentmessege.isEmpty())
             return null;
         else
-            return lastmessege;
+            return currentmessege;
     }
 
     public boolean isNeedToCheck() {
@@ -60,8 +63,8 @@ public class Dialog {
         return phMessage;
     }
 
-    public void setPhMessage(InputFile photo) {
-        this.phMessage.setPhoto(photo);
+    public void setPhMessage(InputFile ph) {
+        this.phMessage.setPhoto(ph);
     }
 
     public SendDocument getDocMessage() {
@@ -78,5 +81,25 @@ public class Dialog {
 
     public void setAns(String ans) {
         this.ans = ans;
+    }
+
+    public long getVersionId() {
+        return versionId;
+    }
+
+    public void setVersionId(long versionId) {
+        this.versionId = versionId;
+    }
+
+    public String getLastmessege() {
+        return lastmessege;
+    }
+
+    public boolean isItWasWrong() {
+        return wasWrong;
+    }
+
+    public void setWasWrong(boolean wasWrong) {
+        this.wasWrong = wasWrong;
     }
 }

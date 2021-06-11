@@ -1,6 +1,8 @@
 package com.simple.dimple.bot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -26,6 +28,7 @@ public class Bot extends TelegramLongPollingBot {
             put("/taskversion", new TakeTaskCommand());
             put("/subject", new GetSubjectCommand());
             put("/commands", new Commands());
+           // put("/addversion", new InputVariantCommand());
         }
     };
     @Override
@@ -39,30 +42,58 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
+   /* public void sendPhoto(SendPhoto photo){
+        try{
+            this.execute(photo);
+        }catch (TelegramApiException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void sendDocument(SendDocument document){
+        try{
+            this.execute(document);
+        }catch (TelegramApiException e){
+            e.printStackTrace();
+        }
+    }*/
 
     @Override
     public void onUpdateReceived(Update update) {
         final Message message=update.getMessage();
         final long chatId=message.getChatId();
         final Dialog dialog=dialogs.computeIfAbsent(chatId, id -> new Dialog());
-        dialog.setLastmessege(message);
-        String[] words=message.getText().split(" ");
-        if(dialog.isNeedToCheck()){
-            new CheckAnswerCommand().execute(dialog);
-        }
-        else{
-        commands.getOrDefault(words[0],d->{}).execute(dialog);
+        dialog.setCurrentmessege(message);
+        String[] words;
+
+        if(message.getText().equals("/new")) {
+            words=dialog.getLastmessege().split(" ");
+            commands.getOrDefault(words[0], d -> {
+            }).execute(dialog);
+        }else{
+            words=message.getText().split(" ");
+            if(dialog.isNeedToCheck()&&!(words[0].equals("/examversion")||words[0].equals("/taskversion"))){
+                new CheckAnswerCommand().execute(dialog);
+            }
+
+            commands.getOrDefault(words[0],d->{}).execute(dialog);
         }
         dialog.setId(chatId);
         try{
-            if(!(words[0].equals("/examversion")||words[0].equals("/taskversion")))
+            if(!(words[0].equals("/examversion")||words[0].equals("/taskversion")||words[0].equals("/new")))
+            {
                 this.execute(dialog.getNextMessage());
-            else{
-                if(words[0].equals("/examversion")){
+                if(dialog.isItWasWrong())
+                {
                     this.execute(dialog.getDocMessage());
+                    dialog.setWasWrong(false);
                 }
-                else{
-                this.execute(dialog.getPhMessage());}}
+            }
+            else{
+
+                    this.execute(dialog.getDocMessage());
+
+            }
         }catch (TelegramApiException e){
             e.printStackTrace();
         }
