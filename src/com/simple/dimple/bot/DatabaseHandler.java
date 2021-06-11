@@ -18,14 +18,14 @@ public class DatabaseHandler extends Configs{
 
     public String getTask(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
-        String select = "SELECT *" + " FROM " + Const.TABLE_NAME + " WHERE " + Const.TASKS_VARIANT +
+        String select = "SELECT *" + " FROM " + Const.TABLE_TASKS + " WHERE " + Const.TASKS_VARIANT +
                 "=" + Variant;
         String Task = null;
         try {
             Statement statement = getDbConnection().createStatement();
             resSet = statement.executeQuery(select);
             while(resSet.next()) {
-                Task = resSet.getString(3);
+                Task = resSet.getString(Const.TASKS_TASK);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -36,7 +36,7 @@ public class DatabaseHandler extends Configs{
 
     public String getAnswers(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
-        String select = " SELECT *" + " FROM " + Const.TABLE_NAME + " WHERE " + Const.TASKS_VARIANT +
+        String select = " SELECT *" + " FROM " + Const.TABLE_TASKS + " WHERE " + Const.TASKS_VARIANT +
                 " =" + Variant;
         String Answers = null;
         try {
@@ -54,7 +54,7 @@ public class DatabaseHandler extends Configs{
 
     public String getSolutions(String Variant) throws SQLException, ClassNotFoundException {
         ResultSet resSet = null;
-        String select = "SELECT *" + " FROM " + Const.TABLE_NAME + " WHERE " + Const.TASKS_VARIANT +
+        String select = "SELECT *" + " FROM " + Const.TABLE_TASKS + " WHERE " + Const.TASKS_VARIANT +
                 "=" + Variant;
         String Solutions = null;
         try {
@@ -69,6 +69,23 @@ public class DatabaseHandler extends Configs{
         }
 
         return Solutions;
+    }
+
+    public int getResult(int Primary_Score) {
+        ResultSet resSet = null;
+        String select = "SELECT *" + " FROM " + Const.TABLE_EVALUATION_CRITERIA_IT + " WHERE " +
+                Const.EVALUATION_CRITERIA_IT_PRIMARY_SCORE + "=" + String.valueOf(Primary_Score);
+        int Result = 0;
+        try {
+            Statement statement = getDbConnection().createStatement();
+            resSet = statement.executeQuery(select);
+            while (resSet.next()) {
+                Result = resSet.getInt(Const.EVALUATION_CRITERIA_IT_SECONDARY_SCORE);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return Result;
     }
 
 }
