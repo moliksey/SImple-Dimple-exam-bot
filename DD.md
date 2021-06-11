@@ -67,4 +67,3 @@ getSolutions() || String(String)
 getResult() || String(int)
 Input_Variant() || int(String Answers, String Task, String Solutions)
 
-
