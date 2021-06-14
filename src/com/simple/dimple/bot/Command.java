@@ -170,7 +170,7 @@ class Commands implements Command{
                 "\"[number of task].[answer in lower case, in one word]\".\n"+
         "\"/taskversion [Task number]\" - takes one of our exam tasks and sends it to you.\n"+
         "\"/subject [Subject name]\" - there you can choose subject you want to studiing.\n" +
-                "Now our bot can help with:"/* Math, RussianLanguage, Physics, */+" InformationTechnologies\n"+
+                "Now our bot can help only with:"/* Math, RussianLanguage, Physics, */+" InformationTechnologies\n"+
         "\"/new\" - take you another task\n"+
                 "\"/commands\" - the command you called, it shows the other commands");
         dialog.setText(message);
